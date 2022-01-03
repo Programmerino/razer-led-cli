@@ -1,0 +1,2 @@
+# razer-led-cli
+Based off of the daemon code for https://github.com/rnd-ash/razer-laptop-control, allows for setting Razer laptop keyboards a static color at high refresh rates through stdin (each line is a color formatted with hex). This allows for cool applications like a [music visualizer](https://github.com/Programmerino/razer-kbd-music) (this requires https://github.com/Kharacternyk/barva) to be used. This project uses [Nix](https://nixos.org/download.html) as the build system, and can be built with `nix build` once installed and flakes are enabled.

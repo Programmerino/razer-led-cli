@@ -1,0 +1,8 @@
+[package]
+name = "razer-led-cli"
+version = "0.1.0"
+authors = ["Davis Davalos-DeLosh <davis.davalos.delosh@gmail.com>"]
+edition = "2021"
+
+[dependencies]
+lazy_static = "1.4.0"

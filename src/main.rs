@@ -19,7 +19,7 @@ fn main() {
     let daemon_pid = s
                                     .process_by_name("daemon")
                                     .iter()
-                                    .filter(|p| p.exe().to_str().unwrap().contains("razercontrol"))
+                                    .filter(|p| p.exe().to_string_lossy().contains("razercontrol"))
                                     .map(|p| p.pid())
                                     .next();
 

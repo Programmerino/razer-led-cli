@@ -1,7 +1,7 @@
 mod board;
 mod driver_sysfs;
 
-use std::{io::{self, BufRead}, process::exit};
+use std::{io::{self, BufRead}, process::exit, panic};
 
 use sysinfo::{System, SystemExt, ProcessExt};
 
@@ -38,21 +38,35 @@ fn main() {
         None => {}
     }
     
-
-    let mut k = board::KeyboardData::new();
-    let stdin = io::stdin();
-    for line in stdin.lock().lines() {
-        let [r, g, b] = parse_hex_color(&line.unwrap());
-        k.set_kbd_colour(r, g, b);
-        k.update_kbd();
-    }
-
+    let result = panic::catch_unwind(|| {
+        let mut k = board::KeyboardData::new();
+        let stdin = io::stdin();
+        for line in stdin.lock().lines() {
+            let [r, g, b] = parse_hex_color(&line.unwrap());
+            k.set_kbd_colour(r, g, b);
+            k.update_kbd();
+        }
+    });
+    
     match daemon_pid {
         Some(x) => {
             resume_daemon(x);
         },
         None => {}
     }
+
+    match result {
+        Ok(_) => {
+            println!("Exiting");
+            exit(0);
+        },
+        Err(e) => {
+            println!("Error occurred, exiting: {:?}", e);
+            exit(1);
+        }
+    }
+
+
 }
 
 fn parse_hex_color(hex_color: &str) -> [u8; 3] {
